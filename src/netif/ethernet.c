@@ -165,6 +165,12 @@ ethernet_input(struct pbuf *p, struct netif *netif)
     }
   }
 
+#ifdef LWIP_HOOK_ETHERNET_INPUT
+  if (LWIP_HOOK_ETHERNET_INPUT(netif, p)) {
+    goto free_and_return;
+  }
+#endif /* LWIP_HOOK_ETHERNET_INPUT */
+
   switch (type) {
 #if LWIP_IPV4 && LWIP_ARP
     /* IP packet? */
